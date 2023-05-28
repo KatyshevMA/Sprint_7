@@ -17,7 +17,7 @@ public class TestSignUpCourier {
 
     @Test
     public void checkSignUpSuccess() {
-        SignUp reg  = new SignUp("ninjaTTTT", "1234", "saske");
+        SignUp reg  = new SignUp("logwww1", "1234", "saske");
         Response response =
         given()
                 .header("Content-type", "application/json")
@@ -26,19 +26,61 @@ public class TestSignUpCourier {
                 .post("/api/v1/courier");
         response.then().assertThat().statusCode(201)
                 .body("ok", is(true));
+
+        int id = given()
+                .header("Content-type", "application/json")
+                .body(reg)
+                .when()
+                .post("/api/v1/courier/login")
+                .then()
+                .extract().jsonPath().get("id");
+
+        given()
+                .header("Content-type", "application/json")
+                .body(reg)
+                .pathParam("id", id)
+                .when()
+                .delete("/api/v1/courier/{id}");
+                //.then().statusCode(200);
     }
 
     @Test
     public void checkSignUpDuplicate() {
-        SignUp reg  = new SignUp("ninjaTTTT", "1234", "saske");
+        SignUp reg  = new SignUp("logwww2", "1234", "saske");
         Response response =
                 given()
                         .header("Content-type", "application/json")
                         .body(reg)
                         .when()
                         .post("/api/v1/courier");
-        response.then().assertThat().statusCode(409)
-                .body("message", equalTo("Этот логин уже используется"));
+
+
+        given()
+                .header("Content-type", "application/json")
+                .body(reg)
+                .when()
+                .post("/api/v1/courier")
+                .then()
+                .statusCode(409)
+                .body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
+
+        int id = given()
+                .header("Content-type", "application/json")
+                .body(reg)
+                .when()
+                .post("/api/v1/courier/login")
+                .then()
+                .extract().jsonPath().get("id");
+        //System.out.println(id);
+
+        given()
+                .header("Content-type", "application/json")
+                .body(reg)
+                .pathParam("id", id)
+                .when()
+                .delete("/api/v1/courier/{id}");
+        //.then().statusCode(200);
+
     }
 
 
@@ -57,7 +99,7 @@ public class TestSignUpCourier {
 
     @Test
     public void checkSignUpWithoutPassword() {
-        SignUp reg  = new SignUp("bbbbnnn", "", "saske");
+        SignUp reg  = new SignUp("logwww3", "", "saske");
         Response response =
                 given()
                         .header("Content-type", "application/json")
@@ -70,7 +112,7 @@ public class TestSignUpCourier {
 
     @Test
     public void checkSignUpWithoutName() {
-        SignUp reg  = new SignUp("wwwvvv", "dfdfdss", "");
+        SignUp reg  = new SignUp("logwww4", "dfdfdss", "");
         Response response =
                 given()
                         .header("Content-type", "application/json")
@@ -79,5 +121,23 @@ public class TestSignUpCourier {
                         .post("/api/v1/courier");
         response.then().assertThat().statusCode(201)
                 .body("ok", is(true));
+
+        int id = given()
+                .header("Content-type", "application/json")
+                .body(reg)
+                .when()
+                .post("/api/v1/courier/login")
+                .then()
+                .extract().jsonPath().get("id");
+        System.out.println(id);
+
+        given()
+                .header("Content-type", "application/json")
+                .body(reg)
+                .pathParam("id", id)
+                .when()
+                .delete("/api/v1/courier/{id}");
+        //.then().statusCode(200);
     }
+
 }
