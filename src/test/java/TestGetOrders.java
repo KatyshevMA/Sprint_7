@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Assert;
@@ -17,6 +18,7 @@ public class TestGetOrders {
     }
 
     @Test
+    @DisplayName("Метод GET/orders. Без параметров")
     public void checkGetOrdersWithoutParamsSuccess() {
         Response response =
         given()
@@ -28,7 +30,8 @@ public class TestGetOrders {
     }
 
     @Test
-    public void checkGetOrdersOfOneCourierSuccess() {
+    @DisplayName("Метод GET/orders. courierId в параметрах")
+    public void checkGetOrdersCourierSelectedSuccess() {
         int courierId = 194993;
         ArrayList<Integer> actualId =
         given()
@@ -44,6 +47,7 @@ public class TestGetOrders {
     }
 
     @Test
+    @DisplayName("Метод GET/orders. Не существующий courierId")
     public void checkGetOrdersOfOneCourierNotFound() {
         int courierId = 5555555;
         given()
@@ -58,7 +62,8 @@ public class TestGetOrders {
     }
 
     @Test
-    public void checkGetOrdersStationSuccess() {
+    @DisplayName("Метод GET/orders. Указан ID станции метро")
+    public void checkGetOrdersStationSelectedSuccess() {
         ArrayList<String> actualStation = new ArrayList<>();
         actualStation.add("Красносельская");
         Response response = given()
@@ -72,6 +77,7 @@ public class TestGetOrders {
     }
 
     @Test
+    @DisplayName("Метод GET/orders. Не существующий ID станции метро")
     public void checkGetOrdersStationNotFound() {
         ArrayList<Integer> availableStations =
         given()
@@ -85,7 +91,8 @@ public class TestGetOrders {
     }
 
     @Test
-    public void checkGetOrdersLimitsSuccess() {
+    @DisplayName("Метод GET/orders. Указан лимит заказов")
+    public void checkGetOrdersLimitsSelectedSuccess() {
         int limit = 5;
         ArrayList<Integer> orders =
                 given()
@@ -99,6 +106,7 @@ public class TestGetOrders {
     }
 
     @Test
+    @DisplayName("Метод GET/orders. Лимит заказов по умолчанию")
     public void checkGetOrdersOverLimits30ByDefault() {
         int limit = 35;
         ArrayList<Integer> orders =
@@ -113,6 +121,7 @@ public class TestGetOrders {
     }
 
     @Test
+    @DisplayName("Метод GET/orders. Указан номер страницы")
     public void checkGetOrdersPageSuccess() {
         int page = 5;
         Response response =

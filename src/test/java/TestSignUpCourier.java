@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.example.SignUp;
@@ -16,6 +17,7 @@ public class TestSignUpCourier {
     }
 
     @Test
+    @DisplayName("Метод POST/courier. Успешная регистрация")
     public void checkSignUpSuccess() {
         SignUp reg  = new SignUp("logwww1", "1234", "saske");
         Response response =
@@ -45,6 +47,7 @@ public class TestSignUpCourier {
     }
 
     @Test
+    @DisplayName("Метод POST/courier. Повторная регистрация")
     public void checkSignUpDuplicate() {
         SignUp reg  = new SignUp("logwww2", "1234", "saske");
         Response response =
@@ -85,6 +88,7 @@ public class TestSignUpCourier {
 
 
     @Test
+    @DisplayName("Метод POST/courier. Не указан логин при регистрации")
     public void checkSignUpWithoutLogin() {
         SignUp reg  = new SignUp("", "1234", "saske");
         Response response =
@@ -98,6 +102,7 @@ public class TestSignUpCourier {
     }
 
     @Test
+    @DisplayName("Метод POST/courier. Не указан пароль при регистрации")
     public void checkSignUpWithoutPassword() {
         SignUp reg  = new SignUp("logwww3", "", "saske");
         Response response =
@@ -111,6 +116,7 @@ public class TestSignUpCourier {
     }
 
     @Test
+    @DisplayName("Метод POST/courier. Не указано имя при регистрации")
     public void checkSignUpWithoutName() {
         SignUp reg  = new SignUp("logwww4", "dfdfdss", "");
         Response response =

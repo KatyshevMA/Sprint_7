@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.example.CreateOrder;
@@ -51,6 +52,7 @@ public class TestCreateOrder {
     }
 
     @Test
+    @DisplayName("Метод POST/orders. Создание заказа")
     public void checkCreateOrderBlackSuccess() {
         CreateOrder order = new CreateOrder(firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment, color);
         Response response =

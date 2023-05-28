@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.example.SignIn;
@@ -15,6 +16,7 @@ public class TestSignInCourier {
     }
 
     @Test
+    @DisplayName("Метод POST/login. Успешная авторизация")
     public void checkSignInSuccess() {
         SignIn login = new SignIn("ninjaTTTT", "1234");
         Response response =
@@ -29,6 +31,7 @@ public class TestSignInCourier {
     }
 
     @Test
+    @DisplayName("Метод POST/login. Пользователь не зарегистрирован")
     public void checkSignInNotFound() {
         SignIn login = new SignIn("ninjaxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "1234");
         Response response =
@@ -43,6 +46,7 @@ public class TestSignInCourier {
     }
 
     @Test
+    @DisplayName("Метод POST/login. Не указан логин при входе")
     public void checkSignInWithoutLoginBadRequest() {
         SignIn login = new SignIn("", "1234");
         Response response =
@@ -52,10 +56,11 @@ public class TestSignInCourier {
                         .when()
                         .post("/api/v1/courier/login");
         response.then().assertThat().statusCode(400)
-                .body("id", equalTo("Недостаточно данных для входа"));
+                .body("message", equalTo("Недостаточно данных для входа"));
     }
 
     @Test
+    @DisplayName("Метод POST/login. Не указан пароль при входе")
     public void checkSignInWithoutPassBadRequest() {
         SignIn login = new SignIn("ninjaTTTT", "");
         Response response =
@@ -65,6 +70,6 @@ public class TestSignInCourier {
                         .when()
                         .post("/api/v1/courier/login");
         response.then().assertThat().statusCode(400)
-                .body("id", equalTo("Недостаточно данных для входа"));
+                .body("message", equalTo("Недостаточно данных для входа"));
     }
 }
