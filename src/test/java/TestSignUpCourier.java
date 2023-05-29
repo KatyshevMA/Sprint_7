@@ -1,7 +1,9 @@
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.example.SignIn;
 import org.example.SignUp;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +12,10 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 public class TestSignUpCourier {
+    private int id1;
+    private int id2;
+    private int id3;
+
 
     @Before
     public void setUp() {
@@ -29,21 +35,14 @@ public class TestSignUpCourier {
         response.then().assertThat().statusCode(201)
                 .body("ok", is(true));
 
-        int id = given()
+        SignIn login1 = new SignIn("logwww1", "1234");
+        id1 = given()
                 .header("Content-type", "application/json")
-                .body(reg)
+                .body(login1)
                 .when()
                 .post("/api/v1/courier/login")
                 .then()
                 .extract().jsonPath().get("id");
-
-        given()
-                .header("Content-type", "application/json")
-                .body(reg)
-                .pathParam("id", id)
-                .when()
-                .delete("/api/v1/courier/{id}");
-                //.then().statusCode(200);
     }
 
     @Test
@@ -57,7 +56,6 @@ public class TestSignUpCourier {
                         .when()
                         .post("/api/v1/courier");
 
-
         given()
                 .header("Content-type", "application/json")
                 .body(reg)
@@ -67,25 +65,15 @@ public class TestSignUpCourier {
                 .statusCode(409)
                 .body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
 
-        int id = given()
+        SignIn login2 = new SignIn("logwww2", "1234");
+        id2 = given()
                 .header("Content-type", "application/json")
-                .body(reg)
+                .body(login2)
                 .when()
                 .post("/api/v1/courier/login")
                 .then()
                 .extract().jsonPath().get("id");
-        //System.out.println(id);
-
-        given()
-                .header("Content-type", "application/json")
-                .body(reg)
-                .pathParam("id", id)
-                .when()
-                .delete("/api/v1/courier/{id}");
-        //.then().statusCode(200);
-
     }
-
 
     @Test
     @DisplayName("Метод POST/courier. Не указан логин при регистрации")
@@ -128,22 +116,34 @@ public class TestSignUpCourier {
         response.then().assertThat().statusCode(201)
                 .body("ok", is(true));
 
-        int id = given()
+        SignIn login3 = new SignIn("logwww4", "dfdfdss");
+        id3 = given()
                 .header("Content-type", "application/json")
-                .body(reg)
+                .body(login3)
                 .when()
                 .post("/api/v1/courier/login")
                 .then()
                 .extract().jsonPath().get("id");
-        System.out.println(id);
+    }
+
+    @After
+    public void tearDown() {
+        given()
+                .header("Content-type", "application/json")
+                .pathParam("id", id1)
+                .when()
+                .delete("/api/v1/courier/{id}");
 
         given()
                 .header("Content-type", "application/json")
-                .body(reg)
-                .pathParam("id", id)
+                .pathParam("id", id2)
                 .when()
                 .delete("/api/v1/courier/{id}");
-        //.then().statusCode(200);
-    }
 
+        given()
+                .header("Content-type", "application/json")
+                .pathParam("id", id3)
+                .when()
+                .delete("/api/v1/courier/{id}");
+    }
 }
