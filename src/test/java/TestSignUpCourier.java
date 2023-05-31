@@ -12,10 +12,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 public class TestSignUpCourier {
-    private int id1;
-    private int id2;
-    private int id3;
-
+    private int id;
 
     @Before
     public void setUp() {
@@ -36,7 +33,7 @@ public class TestSignUpCourier {
                 .body("ok", is(true));
 
         SignIn login1 = new SignIn("logwww1", "1234");
-        id1 = given()
+        id = given()
                 .header("Content-type", "application/json")
                 .body(login1)
                 .when()
@@ -66,7 +63,7 @@ public class TestSignUpCourier {
                 .body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
 
         SignIn login2 = new SignIn("logwww2", "1234");
-        id2 = given()
+        id = given()
                 .header("Content-type", "application/json")
                 .body(login2)
                 .when()
@@ -117,7 +114,7 @@ public class TestSignUpCourier {
                 .body("ok", is(true));
 
         SignIn login3 = new SignIn("logwww4", "dfdfdss");
-        id3 = given()
+        id = given()
                 .header("Content-type", "application/json")
                 .body(login3)
                 .when()
@@ -130,19 +127,7 @@ public class TestSignUpCourier {
     public void tearDown() {
         given()
                 .header("Content-type", "application/json")
-                .pathParam("id", id1)
-                .when()
-                .delete("/api/v1/courier/{id}");
-
-        given()
-                .header("Content-type", "application/json")
-                .pathParam("id", id2)
-                .when()
-                .delete("/api/v1/courier/{id}");
-
-        given()
-                .header("Content-type", "application/json")
-                .pathParam("id", id3)
+                .pathParam("id", id)
                 .when()
                 .delete("/api/v1/courier/{id}");
     }
